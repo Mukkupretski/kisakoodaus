@@ -27,47 +27,43 @@ typedef unordered_set<int> seti;
 #define f first
 #define s second
 
+int res = 0;
+
+void nqueens(vi& pos, int i, vector<vector<bool>>& board){
+  if(i==8){
+    res++;
+    return;
+  }
+  loop(j,0,8){
+    if (board[i][j]){
+      continue;  
+    }
+    bool f = 0;
+    loop(k,0,8){
+      if(pos[k] == -1) continue;
+      if(pos[k] == i - abs(j-k)) f = 1;
+    }
+    if(pos[j] != -1) f = 1;
+    if(f) continue;
+    pos[j] = i;
+    nqueens(pos, i+1, board);
+    pos[j] = -1;
+  }
+}
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    unordered_map<ll, ll> bsums;
-    int n, x;
-    cin >> n >> x;
-    vi a;
-    vi b;
-    int h = n/2;
-    loop(i,0,h){
-      int t;
-      cin >> t;
-      a.pb(t);
-    }
-
-    loop(i,h,n){
-      int t;
-      cin >> t;
-      b.pb(t);
-    }
-    
-    loop(i,0,(1 << h)){
-      ll s = 0;
-      loop(j,0,h){
-        if(1&(i >> j)) s += a[j];
-      }
-      if(!bsums.count(s)) bsums[s] = 0;
-      bsums[s]++;
-    }
-    ll res = 0;
-    int h2 = n - h;
-    loop(i,0,(1 << h2)){
-      ll s = 0;
-      loop(j,0,h2){
-        if(1&(i >> j)) s += b[j];
-      }
-      if (bsums.count(x - s)) {
-       res += bsums[x - s]; 
+    vector<vector<bool>> board(8,vector<bool>(8,0));
+    loop(i,0,8){
+      string s;
+      cin >> s;
+      loop(j,0,8){
+        if(s.at(j) == '*') board[i][j] = 1;
       }
     }
+    vi pos(8,-1);
+    nqueens(pos, 0, board);
     cout << res;
     return 0;
 }

@@ -27,47 +27,35 @@ typedef unordered_set<int> seti;
 #define f first
 #define s second
 
+void permute(vector<bool>& p, int n, set<string>& res, string& s, string& curr){
+  if (curr.size() == n) {
+   res.insert(curr);
+   return;
+  }
+  loop(i,0,n){
+    if(p[i]) continue;
+    p[i] = 1;
+    curr += s.at(i);
+    permute(p, n, res, s, curr);
+    curr.pop_back();
+    p[i] = 0;
+  }
+}
+
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    unordered_map<ll, ll> bsums;
-    int n, x;
-    cin >> n >> x;
-    vi a;
-    vi b;
-    int h = n/2;
-    loop(i,0,h){
-      int t;
-      cin >> t;
-      a.pb(t);
+    set<string> res;
+    string s;
+    cin >> s;
+    int n = s.length();
+    vector<bool> p(n,0);
+    string curr = "";
+    permute(p, n, res, s, curr);
+    cout << res.size() << "\n";
+    for(const string& s : res){
+      cout << s << "\n";
     }
-
-    loop(i,h,n){
-      int t;
-      cin >> t;
-      b.pb(t);
-    }
-    
-    loop(i,0,(1 << h)){
-      ll s = 0;
-      loop(j,0,h){
-        if(1&(i >> j)) s += a[j];
-      }
-      if(!bsums.count(s)) bsums[s] = 0;
-      bsums[s]++;
-    }
-    ll res = 0;
-    int h2 = n - h;
-    loop(i,0,(1 << h2)){
-      ll s = 0;
-      loop(j,0,h2){
-        if(1&(i >> j)) s += b[j];
-      }
-      if (bsums.count(x - s)) {
-       res += bsums[x - s]; 
-      }
-    }
-    cout << res;
     return 0;
 }

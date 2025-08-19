@@ -31,41 +31,21 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    unordered_map<ll, ll> bsums;
-    int n, x;
-    cin >> n >> x;
-    vi a;
-    vi b;
-    int h = n/2;
-    loop(i,0,h){
-      int t;
-      cin >> t;
-      a.pb(t);
+    int n;
+    cin >> n;
+    vvi v;
+    loop(i,0,n){
+      int a,b;
+      cin >> a >> b;
+      v.pb({b,a});
     }
-
-    loop(i,h,n){
-      int t;
-      cin >> t;
-      b.pb(t);
-    }
-    
-    loop(i,0,(1 << h)){
-      ll s = 0;
-      loop(j,0,h){
-        if(1&(i >> j)) s += a[j];
-      }
-      if(!bsums.count(s)) bsums[s] = 0;
-      bsums[s]++;
-    }
-    ll res = 0;
-    int h2 = n - h;
-    loop(i,0,(1 << h2)){
-      ll s = 0;
-      loop(j,0,h2){
-        if(1&(i >> j)) s += b[j];
-      }
-      if (bsums.count(x - s)) {
-       res += bsums[x - s]; 
+    sort(all(v));
+    int ps = 0;
+    int res = 0;
+    loop(i,0,n){
+      if(v[i][1] >= ps){
+        res++;
+        ps = v[i][0];
       }
     }
     cout << res;
